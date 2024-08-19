@@ -1,0 +1,13 @@
+views:
+  - file: StartGame.png
+    view: "开始游戏界面"
+  - file: close.png
+    view: "弹窗界面"
+  - file: home.png
+    view: "主界面"
+    x: 55
+    y: 50
+
+
+
+

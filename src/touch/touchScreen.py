@@ -1,42 +1,36 @@
 import cv2 as cv
 from pyscrcpy import Client  # import scrcpy client
+from pyscrcpy import control
 import time
 import random
 from typing import Union
 import pathlib
-import touch
-
+from pyscrcpy import Client
 
 __base_path__ = pathlib.Path.cwd()
 
+def display(frame: cv.typing.MatLike):
+    cv.imshow("Video", frame)
+    cv.waitKey(1)
 
-class touchScreen:
-    def __init__(self, devices_name, max_fps: int = 30) -> None:
-        touch.AdbClient.__init__(self, devices_name, max_fps)
 
-    def on_frame(self, client: Client, frame: cv.typing.MatLike):
-        save_path = (
-            __base_path__ / "resources" / "img" / "screenshot" / "screenshot.png"
-        )
-        if frame is not None:
-            if self._save_next_frame:
-                success = cv.imwrite(str(save_path), frame)
-                print("截图成功" if success else "截图失败")
-                self._save_next_frame = False
-            cv.imshow("Video", frame)
-            cv.waitKey(1)
+class TouchScreen:    
+    def __init__(self, client: Client) -> None:
+        # 创建scrcpy客户端
+        self.client = client
+        self._save_next_frame: bool = False  # 标志位，指示是否保存下一帧
 
     # 按下操作
     def touch_start(self, x: Union[int, float], y: Union[int, float]):
-        self.client.control.touch(int(x), int(y))
+        self.client.control.touch(x=int(x), y=int(y))
 
     # 移动操作
     def touch_move(self, x: Union[int, float], y: Union[int, float]):
-        self.client.control.touch(int(x), int(y))
+        self.client.control.touch(x=int(x), y=int(y))
 
     # 松开操作
     def touch_end(self, x: Union[int, float], y: Union[int, float]):
-        self.client.control.touch(int(x), int(y))
+        self.client.control.touch(x=int(x), y=int(y))
 
     # 点击操作(在指定位置按下并松开)
     def tap(self, x: Union[int, float], y: Union[int, float]):

@@ -1,3 +1,1 @@
-from .adbClient import AdbClient
-
-__all__ = ["AdbClient"]
+from .touchScreen import TouchScreen
